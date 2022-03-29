@@ -49,18 +49,20 @@ def get_effects(obj: dict, relevant: dict, additional: dict = None):
                 continue
 
             for entry in entries[key]:
-                chunks.update((
-                    _parse_timestamp(entry['virkning']['from']),
-                    _parse_timestamp(entry['virkning']['to']),
-                ))
+                chunks.update(
+                    (
+                        _parse_timestamp(entry["virkning"]["from"]),
+                        _parse_timestamp(entry["virkning"]["to"]),
+                    )
+                )
 
     # sort them, and apply the filter, if given
     chunks = get_date_chunks(chunks)
 
     def filter_list(entries, start, end):
         for entry in entries:
-            entry_start = _parse_timestamp(entry['virkning']['from'])
-            entry_end = _parse_timestamp(entry['virkning']['to'])
+            entry_start = _parse_timestamp(entry["virkning"]["from"])
+            entry_end = _parse_timestamp(entry["virkning"]["to"])
 
             if entry_start < end and entry_end > start:
                 yield entry
@@ -99,9 +101,9 @@ def get_date_chunks(dates):
 def _parse_timestamp(
     timestamp: typing.Union[datetime.datetime, str]
 ) -> datetime.datetime:
-    if timestamp == 'infinity':
+    if timestamp == "infinity":
         dt = datetime.datetime.max
-    elif timestamp == '-infinity':
+    elif timestamp == "-infinity":
         dt = datetime.datetime.min
     elif type(timestamp) == str:
         dt = dateutil.parser.isoparse(timestamp)
